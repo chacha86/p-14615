@@ -1,6 +1,9 @@
 spring:
   application:
     name: p-14615
+  output:
+    ansi:
+      enabled: always
   h2:
     console:
       enabled: true
@@ -14,6 +17,11 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
 
 server:
   port: 8081
