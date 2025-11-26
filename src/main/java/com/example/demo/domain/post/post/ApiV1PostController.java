@@ -2,9 +2,7 @@ package com.example.demo.domain.post.post;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,4 +28,12 @@ public class ApiV1PostController {
         return postList;
     }
 
+    @DeleteMapping("/api/v1/posts/{id}")
+    @ResponseBody
+    public String remove(@PathVariable Long id) {
+
+        postService.delete(id);
+
+        return "글 삭제가 완료되었습니다.";
+    }
 }
