@@ -1,41 +1,23 @@
 package com.example.demo.domain.post.post;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class PostController {
 
-    @GetMapping("/")
-    @ResponseBody
-    public String test() {
-        return "hahaha";
-    }
+    private final PostService postService;
 
-    @GetMapping("/posts")
-    @ResponseBody
-    public String posts() {
-        return "posts";
-    }
+    @GetMapping("/post/list")
+    public String list(Model model) {
+        List<Post> posts = postService.list();
+        model.addAttribute("posts", posts);
 
-    @GetMapping("/posts/12")
-    public String posts12() {
-        return "test";
-    }
-
-    @GetMapping("/menu")
-    public String menu() {
-        return "menu";
-    }
-
-    @GetMapping("/param")
-    @ResponseBody
-    public String param(String name, int age) {
-
-        System.out.println("name: " + name);
-        System.out.println("age: " + age);
-
-        return "param";
+        return "postList";
     }
 }

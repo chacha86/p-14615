@@ -1,4 +1,4 @@
-package com.example.demo.domain.post.post;
+package com.example.demo.domain.member;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,14 +8,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Setter
 @Getter
-public class Post {
-
+@Setter
+public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
-    private String content;
-
+    private String nickname;
 }

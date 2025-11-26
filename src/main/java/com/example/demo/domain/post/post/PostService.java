@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class PostService {
@@ -21,6 +23,12 @@ public class PostService {
         post.setContent(content);
 
         return postRepository.save(post);
+    }
+
+    public List<Post> list() {
+        List<Post> posts = postRepository.findAll();
+
+        return posts;
     }
 
 }
