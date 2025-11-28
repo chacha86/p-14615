@@ -24,15 +24,14 @@ public class ApiV1PostController {
     static class WriteReqBody {
         private String title;
         private String content;
-        private String apiKey;
     }
 
 
     @PostMapping("/api/v1/posts")
     @ResponseBody
-    public RsData write(@RequestBody WriteReqBody writeReqBody) {
+    public RsData write(@RequestBody WriteReqBody writeReqBody, @RequestHeader("Authorization") String apiKey) {
 
-        Optional<Member> opMember = memberService.findByApiKey(writeReqBody.apiKey);
+        Optional<Member> opMember = memberService.findByApiKey(apiKey);
 
         if (opMember.isEmpty()) {
             throw new ServiceException("401", "잘못된 API키입니다.");
