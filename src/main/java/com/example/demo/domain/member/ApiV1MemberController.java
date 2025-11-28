@@ -1,11 +1,19 @@
 package com.example.demo.domain.member;
 
+import com.example.demo.domain.post.post.ApiV1PostController;
+import com.example.demo.domain.post.post.RsData;
+import com.example.demo.global.exception.ServiceException;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -13,16 +21,42 @@ public class ApiV1MemberController {
 
     private final MemberService memberService;
 
+    @Getter
+    @NoArgsConstructor
+    static class LoginReqBody {
+        private String username;
+        private String password;
+    }
+
+    @PostMapping("/api/v1/login")
+    @ResponseBody
+    public RsData login(@RequestBody LoginReqBody loginReqBody) {
+
+        Optional<Member> opMember = memberService.findByUsername(loginReqBody.username);
+
+        if (opMember.isEmpty()) {
+            throw new ServiceException("401", "없는 회원입니다.");
+        }
+
+        Member member = opMember.get();
+
+        if (!member.getPassword().equals(loginReqBody.password)) {
+            throw new ServiceException("401", "비밀번호를 틀렸습니다.");
+        }
+
+        RsData rsData = new RsData();
+        rsData.setResultCode("200");
+        rsData.setMessage(loginReqBody.username + "님 로그인 하셨습니다.");
+        rsData.setData(member.getApiKey());
+
+        return rsData;
+    }
+
+
     @GetMapping("/api/v1/members")
     @ResponseBody
     public List<Member> list() {
-
         List<Member> members = memberService.list();
-
-        // 데이터를 못찾을 수 있음 -> 404
-
-        // 에러가 날 수 있음 -> 500
-
         return members;
     }
 

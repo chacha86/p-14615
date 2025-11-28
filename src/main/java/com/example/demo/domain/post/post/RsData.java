@@ -9,4 +9,5 @@ public class RsData {
 
     private String resultCode;
     private String message;
+    private String data;
 }
