@@ -57,5 +57,10 @@ public class AuthTokenServiceTest {
 
         System.out.println("accessToken = " + accessToken);
 
+        Map<String, Object> payload = authTokenService.payload(accessToken);
+
+        System.out.println("id : " + payload.get("id"));
+        System.out.println("username : " + payload.get("username"));
+
     }
 }

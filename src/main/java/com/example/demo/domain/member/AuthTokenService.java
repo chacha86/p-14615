@@ -19,4 +19,18 @@ public class AuthTokenService {
                 Map.of("id", member.getId(), "username", member.getUsername())
         );
     }
+
+    public Map<String, Object> payload(String jwt) {
+        Map<String, Object> payload = Ut.jwt.payload(jwt, secretPattern);
+
+        if(payload == null) {
+            return null;
+        }
+
+        int id = (int)payload.get("id");
+        String username = (String)payload.get("username");
+
+
+        return Map.of("id", (long)id, "username", username);
+    }
 }
