@@ -38,9 +38,31 @@ public class Ut {
             return jwt;
         }
 
+        public static boolean isValid(String jwt, String secretPattern) {
+
+            SecretKey secretKey = Keys.hmacShaKeyFor(secretPattern.getBytes(StandardCharsets.UTF_8));
+
+            try {
+                Jwts
+                        .parser()
+                        .verifyWith(secretKey)
+                        .build()
+                        .parse(jwt);
+
+            } catch (Exception e) {
+                return false;
+            }
+
+            return true;
+        }
+
         public static Map<String, Object> payload(String jwt, String secretPattern) {
 
             SecretKey secretKey = Keys.hmacShaKeyFor(secretPattern.getBytes(StandardCharsets.UTF_8));
+
+            if(!isValid(jwt, secretPattern)) {
+                return null;
+            }
 
             return  (Map<String, Object>) Jwts
                     .parser()
