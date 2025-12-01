@@ -31,7 +31,13 @@ public class MemberService {
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
     }
+
     public Optional<Member> findByApiKey(String apiKey) {
         return memberRepository.findByApiKey(apiKey);
     }
+
+    public Optional<Member> findById(Long id) {
+        return memberRepository.findById(id);
+    }
+
 }
