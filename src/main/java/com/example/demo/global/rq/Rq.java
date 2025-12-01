@@ -19,6 +19,7 @@ public class Rq {
     private final MemberService memberService;
     private final HttpServletRequest request;
 
+    // actor => 활동하고 있는 회원
     public Member getActor() {
         String apiKey;
         String accessToken;

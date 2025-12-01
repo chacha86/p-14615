@@ -3,6 +3,7 @@ package com.example.demo.domain.post.post;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.member.MemberService;
 import com.example.demo.global.exception.ServiceException;
+import com.example.demo.global.rq.Rq;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ public class ApiV1PostController {
 
     private final PostService postService;
     private final MemberService memberService;
+    private final Rq rq;
 
     @Getter
     @NoArgsConstructor
@@ -29,20 +31,9 @@ public class ApiV1PostController {
 
     @PostMapping("/api/v1/posts")
     @ResponseBody
-    public RsData write(@RequestBody WriteReqBody writeReqBody, @RequestHeader("Authorization") String apiKey) {
+    public RsData write(@RequestBody WriteReqBody writeReqBody) {
 
-        if(apiKey.startsWith("Bearer ")) {
-            apiKey = apiKey.replace("Bearer ", "");
-        }
-
-        Optional<Member> opMember = memberService.findByApiKey(apiKey); // Bearer ac561b4d-441d-4014-9f89-dfbd8ad7aeb3
-
-        if (opMember.isEmpty()) {
-            throw new ServiceException("401", "잘못된 API키입니다.");
-        }
-
-        Member member = opMember.get();
-
+        Member member = rq.getActor();
         postService.write(writeReqBody.title, writeReqBody.content);
 
         RsData rsData = new RsData();
@@ -51,6 +42,7 @@ public class ApiV1PostController {
 
         return rsData;
     }
+
 
     @GetMapping("/api/v1/posts")
     @ResponseBody
