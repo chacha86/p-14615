@@ -75,6 +75,7 @@ public class ApiV1MemberController {
         return members;
     }
 
+    // 회원가입 기능 구현 - worker1
 
 
 }
