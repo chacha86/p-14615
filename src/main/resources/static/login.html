@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form id="loginForm" onsubmit="login(this); return false;">
+    <input type="text" id="username" placeholder="email"/>
+    <input type="password" id="password" placeholder="password"/>
+    <button type="submit">Login</button>
+</form>
+
+<script>
+    async function login(form) {
+        const username = form.username.value;
+        const password = form.password.value;
+        console.log(username)
+        console.log(password)
+        try {
+            const response = await fetch("http://localhost:8081/api/v1/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                }),
+            });
+
+            const rsData = await response.json();
+
+            console.log(rsData)
+            if (rsData.resultCode !== "200") {
+                throw new Error("로그인 실패: " + rsData.message);
+            }
+
+            const {
+                accessToken,
+                apiKey
+            } = rsData.data;
+
+            // localStorage 저장
+            localStorage.setItem("accessToken", accessToken);
+            localStorage.setItem("apiKey", apiKey);
+            console.log("로그인 성공!");
+            console.log("accessToken:", accessToken);
+            console.log("apiKey:", apiKey);
+
+            location.href = "/write.html";
+
+        } catch (err) {
+            console.log("00000000000000000000")
+            console.log(err);
+            alert(err);
+            return false;
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<!-- 글 작성 폼 -->
+<form id="postForm" onsubmit="createPost(this); return false;">
+    <input type="text" name="title" placeholder="글 제목"/><br/>
+    <textarea name="content" placeholder="글 내용"></textarea><br/>
+    <button type="submit">등록</button>
+</form>
+<button onclick="location.href='/login.html'">
+    로그인
+</button>
+<button onclick="logout();">
+    로그아웃
+</button>
+
+<script>
+
+    /* 로그아웃 처리 -------------------------------------------------- */
+    function logout() {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("apiKey");
+
+        alert("로그아웃 되었습니다.");
+        location.href = "/login.html";
+    }
+
+    /* 글 등록 처리 -------------------------------------------------- */
+    async function createPost(form) {
+        const title = form.title.value;
+        const content = form.content.value;
+        const accessToken = localStorage.getItem("accessToken");
+        const apiKey = localStorage.getItem("apiKey");
+        if (!accessToken || !apiKey) {
+            alert("로그인이 필요합니다!");
+            return;
+        }
+        try {
+            const response = await fetch("http://localhost:8081/api/v1/posts", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    // 요청한 Authorization 형식
+                    "Authorization": `Bearer ${apiKey} ${accessToken}`
+                },
+                body: JSON.stringify({
+                    title: title,
+                    content: content
+                })
+            });
+            if (!response.ok) {
+                alert("글 등록 실패");
+                return;
+            }
+            const data = await response.json();
+            console.log("생성된 글:", data);
+            alert("글 등록 완료!");
+        } catch (e) {
+            console.error(e);
+            alert("글 등록 중 오류 발생");
+        }
+    }
+</script>
+</body>
+
+</html>
